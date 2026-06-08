@@ -1,47 +1,22 @@
-QQ204 = (
+from dataclasses import dataclass
 
-    "http://www.qq.com"
+from checker.speedtest import (
 
-    "/generate_204"
-)
-
-BAIDU = (
-
-    "https://www.baidu.com"
-)
-from checker.models import (
-    BenchmarkResult
+    SpeedTester
 )
 
 
-async def run(
-    worker,
-    node
-):
+@dataclass
+class BenchmarkResult:
 
-    await worker.push_config(
-        node
-    )
+    node: dict
 
-    result = await worker.delay(
+    success: bool
 
-        node["name"],
+    delay_ms: float
 
-        QQ204
-    )
+    speed_mbps: float
 
-    delay = result.get(
-        "delay",
-        9999
-    )
+    score: float
 
-    return BenchmarkResult(
-
-        node=node,
-
-        delay=delay,
-
-        speed=0,
-
-        success=delay < 3000
-    )
+    error: str = ""
